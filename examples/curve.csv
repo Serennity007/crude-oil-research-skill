@@ -1,0 +1,4 @@
+contract,delivery_month,price,quote_time,benchmark,currency,unit
+DEMO_NEAR,2024-03,80,2024-01-09T00:00:00Z,WTI,USD,currency_per_barrel
+DEMO_MID,2024-04,78,2024-01-09T00:00:00Z,WTI,USD,currency_per_barrel
+DEMO_FAR,2024-05,77,2024-01-09T00:00:00Z,WTI,USD,currency_per_barrel
