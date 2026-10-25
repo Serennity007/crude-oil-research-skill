@@ -1,4 +1,6 @@
 interface:
-  display_name: "原油研究 Skill"
-  short_description: "原油供需、航运冲击和期限结构研究，提供离线曲线计算与情景复盘"
-  default_prompt: "使用 $crude-oil-research-skill，根据我提供的标的、数据与截止时间完成研究，明确事实、情景、失效条件和复盘检查点。"
+  display_name: "Crude oil Research"
+  short_description: "Publication-aware crude-oil futures research and replay"
+  default_prompt: "Use $crude-oil-research-skill to research the supplied contract and evidence, preserving availability clocks and explaining contrary evidence."
+policy:
+  allow_implicit_invocation: true
