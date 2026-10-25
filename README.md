@@ -1,14 +1,16 @@
-![原油研究](.github/cover.svg)
+[English](README.md) · [简体中文](README.zh-CN.md)
 
-# 原油研究
+![Crude Oil Research](.github/cover.svg)
 
-这里整理 WTI、Brent 和 SC 的研究步骤，先把合约、币种和报价时间对齐，再看供需与跨月价差。
+# Crude Oil Research
 
-[涛涛的期货研究](https://github.com/Serennity007/taotao-futures-research) · [Skill 指令](SKILL.md) · MIT
+Study WTI, Brent and SC after aligning contracts, currencies and quote times; then inspect supply, demand and calendar spreads.
 
-## 跑一次练习
+[Futures research workbench](https://github.com/Serennity007/taotao-futures-research) · [Agent Skill](SKILL.md) · [Language coverage](docs/LANGUAGES.md) · MIT
 
-准备 Python 3.10 及以上版本，脚本只用标准库：
+## Run an offline exercise
+
+Python 3.10+ is required. The scripts use only the standard library.
 
 ```bash
 git clone https://github.com/Serennity007/crude-oil-research-skill.git
@@ -16,51 +18,54 @@ cd crude-oil-research-skill
 python scripts/run_research.py --config examples/workbench.json --out output
 ```
 
-打开终端打印的 `REPORT.html`。想先看结果，可以打开 [文字报告](examples/workbench/REPORT.md)，或下载 [HTML 报告](examples/workbench/REPORT.html) 后用浏览器查看。
+Open the printed `REPORT.html` path. You can also inspect the committed [Markdown report](examples/workbench/REPORT.md) or download the [HTML report](examples/workbench/REPORT.html).
 
-仓库自带的 CSV 是模拟数据，日期是练习标签。这组练习可以核对计算和步骤，不能作为历史交易记录。
+The supplied CSV files are synthetic; dates label the exercise. They test calculations and workflow, not a historical trading record. Research reports and reference material currently retain Chinese text; this source release provides English and Chinese entry guides, not an application language switch.
 
-## 对照结果看数据
+## Check the numbers
 
-打开 `examples/previous-curve.csv` 和 `examples/curve.csv`。两份文件的端点不同，报告会列出移除的合约，再取共同的 DEMO_NEAR/DEMO_FAR 比较。
+Compare `examples/previous-curve.csv` and `examples/curve.csv`. Their endpoints differ, so the report lists dropped contracts and compares the common `DEMO_NEAR` / `DEMO_FAR` pair.
 
-前次79−77.5=1.5，本次80−77=3，价差扩大1.5美元/桶。报告算的是同一对合约的价格变化；解释原因还要补库存、交付和需求资料。
+The earlier spread is 79 − 77.5 = 1.5; the later spread is 80 − 77 = 3, a widening of 1.5 USD/barrel for the same contract pair. This arithmetic does not establish an inventory or demand explanation. [Curve inputs](references/domain-data.md) describe the fields.
 
-[方法说明](references/method.md) 写了供需和物流该怎么分开检查，[曲线格式](references/domain-data.md) 列了输入字段。
+See the [method](references/method.md) for assumptions and additional evidence to check.
 
-## 换自己的数据
+## Use your own data
 
-复制 `examples/workbench.json`，修改标的、截止时间和文件位置。导入数据时，将 `data_kind` 改成 `imported_observations`，给每个文件填写来源名称和取数时间。[输入字段与配置](references/workbench.md) 有说明，旧的单项计算命令也保留在里面。
+Copy `examples/workbench.json`, then set the instrument, cutoff and file paths. For imported observations, set `data_kind` to `imported_observations` and record a source name and retrieval time for every file. [Fields and configuration](references/workbench.md) also document the original standalone calculation commands.
 
-程序把 CSV 的相对路径按配置文件位置解析。若从其他目录运行，使用脚本和配置的绝对路径。
+CSV paths are resolved relative to the configuration file. When running from another directory, use absolute script and configuration paths.
 
-## 保存和复盘
+## Save and review runs
 
-每次运行会新建 `output/run-…/`。`REPORT.md` 放文字结果，`bundle.json` 放计算明细，`inputs/` 保存本次使用的文件。
-
-在本仓库用旧报告的配置重跑：
+Each run creates `output/run-…/`: `REPORT.md` contains the narrative, `bundle.json` the calculation details, and `inputs/` the actual files used. Rerun a saved snapshot in this repository:
 
 ```bash
-python scripts/run_research.py --config 旧报告目录/config.snapshot.json --out output
+python scripts/run_research.py --config /path/to/previous-run/config.snapshot.json --out output
 ```
 
-把“旧报告目录”换成实际路径。输入相同，计算结果应一致。复盘时保留旧报告，再用新数据另跑一份，对照原来等的条件有没有发生。[记录格式](references/report-template.md) 可作参考。
+The same inputs should reproduce the calculations. Keep the old run, create a separate run with new data and compare whether the stated conditions occurred. See the [report template](references/report-template.md).
 
-## 作为 Skill 使用
+## Use as an Agent Skill
 
-把整个仓库放进你使用工具的技能目录，保留文件夹名 `crude-oil-research-skill`。调用时写清数据位置、标的和截止时间：
+Copy the whole repository to your agent's skill directory, keeping the folder name `crude-oil-research-skill`. State the data paths, instrument, cutoff and desired response language:
 
 ```text
-使用 $crude-oil-research-skill，读取我提供的……，截止时间为……。
-运行计算，说明已经观察到什么、还有什么要查，保存报告。
+Use $crude-oil-research-skill with the supplied data, instrument and cutoff.
+Run the calculations, distinguish observations from missing evidence,
+save the report and explain the results in English.
 ```
 
-## 检查计算
+The original Skill instructions remain in Chinese. The response language request does not automatically translate script-generated artifacts.
+
+## Verification and sources
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-当前有 26 项本地测试，检查计算、时间截止和文件读写。实际数据的来源、单位与历史版本仍需要你核对。[官方资料入口](references/sources.md) 放在这里。
+Tests cover calculations, cutoff handling and file I/O. Real-world source identity, units and historical versions still require review. [Official source entry points](references/sources.md) are provided.
 
-K 线计算沿用我在 [选股工具合集](https://github.com/Serennity007/awesome-stock-quant-skills/tree/67156b0aa4860894a8cdbc66b797db535531fe59/my-skills/gold-cross-asset-research) 中整理的脚本，本仓库附有自身代码与测试。
+The OHLC helper derives from the author's [quant research collection](https://github.com/Serennity007/awesome-stock-quant-skills/tree/67156b0aa4860894a8cdbc66b797db535531fe59/my-skills/gold-cross-asset-research); this repository includes its own code and tests.
+
+Research and learning only; calculations and synthetic examples do not establish trading performance. Original code is distributed under [MIT](LICENSE).
